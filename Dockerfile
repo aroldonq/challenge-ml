@@ -1,11 +1,12 @@
-FROM python:3.9
+FROM python:3.9.4-buster
 
-WORKDIR /code
+RUN mkdir build
+WORKDIR /build
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 80
+WORKDIR /build/app
 
-COPY ./requirements.txt /code/requirements.txt
+CMD python -m uvicorn main:app --host 0.0.0.0 --port 80
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-COPY ./app /code/app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+#CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]

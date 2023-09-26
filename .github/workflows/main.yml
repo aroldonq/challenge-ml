@@ -60,10 +60,6 @@ jobs:
               aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids $imageIds
           fi
  
-    - name: Log out of Amazon ECR
-      if: always()
-      run: docker logout ${{ steps.login-ecr.outputs.registry }}
-
   deploy:
 
      needs: build

@@ -1,18 +1,22 @@
-# Usa una imagen base de Python
-FROM python:3.8-slim
+FROM python:3.9-slim-buster
 
-# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia los archivos necesarios al directorio de trabajo
-COPY app/ /app/app/
+# install dependencies
+COPY ./requirements.txt /app
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Instala las dependencias
-RUN pip install uvicorn
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y libsndfile1
+RUN apt-get update && apt-get install -y ffmpeg
 
-# Expone el puerto en el que se ejecutará la aplicación
-EXPOSE 8080
+RUN useradd -m -u 1000 user
+USER user
 
-# Comando para ejecutar la aplicación
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
+
+WORKDIR $HOME/app
+
+COPY --chown=user . $HOME/app
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8010"]

@@ -1,18 +1,17 @@
-FROM python:3.8-slim-buster
+# Usa una imagen base de Python
+FROM python:3.8-slim
 
-# Create project directory (workdir)
+# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Add requirements.txt to WORKDIR and install dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Copia los archivos necesarios al directorio de trabajo
+COPY app/ /app/app/
 
-# Add source code files to WORKDIR
-ADD . .
+# Instala las dependencias
+RUN pip install uvicorn
 
-# Application port (optional)
+# Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8080
 
-# Container start command
-# It is also possible to override this in devspace.yaml via images.*.cmd
-CMD ["python", "main.py"]
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "app.main:main", "--host", "0.0.0.0", "--port", "8080"]

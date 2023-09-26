@@ -1,13 +1,18 @@
-FROM python:3.10
+FROM python:3.8-slim-buster
 
-WORKDIR /tmp
+# Create project directory (workdir)
+WORKDIR /app
 
-RUN pip install --upgrade pip
-
+# Add requirements.txt to WORKDIR and install dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install -r requirements.txt
 
-WORKDIR /code
+# Add source code files to WORKDIR
+ADD . .
 
-CMD ["uvicorn", "package.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
-#CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+# Application port (optional)
+EXPOSE 8080
+
+# Container start command
+# It is also possible to override this in devspace.yaml via images.*.cmd
+CMD ["python", "main.py"]

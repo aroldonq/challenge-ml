@@ -19,4 +19,4 @@ WORKDIR $HOME/app
 
 COPY --chown=user . $HOME/app
 
-CMD ["uvicorn", "app:app", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--reload"]

@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 80
 WORKDIR /build/app
 
-CMD ["python", "uvicorn", "app.main:main", "--host", "0.0.0.0", "--port", "8080" "--reload"]
+CMD ["uvicorn", "app.main:main", "--reload", "--port", "8080"]
 
 #CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]

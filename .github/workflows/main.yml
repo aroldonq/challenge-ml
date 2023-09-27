@@ -78,7 +78,6 @@ jobs:
             username: ${{ secrets.USER_NAME  }}
             key: ${{ secrets.AWS_PRIVATE_KEY }}
             port: ${{ secrets.PORT }}
-            script: 'sudo microk8s kubectl rollout restart deployment ${{ secrets.ECR_REPOSITORY  }} -n ${{ secrets.ECR_REPOSITORY  }}'
 
 
         - name: Delete the <untagged> Amazon ECR

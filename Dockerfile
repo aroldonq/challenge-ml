@@ -1,22 +1,12 @@
-FROM python:3.9-slim-buster
+FROM python:3.9
 
-WORKDIR /app
+RUN mkdir build
+WORKDIR /build
 
-# install dependencies
-COPY ./requirements.txt /app
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN apt-get update && apt-get install -y libsndfile1
-RUN apt-get update && apt-get install -y ffmpeg
+EXPOSE 80
+WORKDIR /build/app
 
-RUN useradd -m -u 1000 user
-USER user
-
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
-
-WORKDIR $HOME/app
-
-COPY --chown=user . $HOME/app
-
-CMD ["uvicorn", "main:app", "--reload"]
+CMD python -m uvicorn main:app --host 0.0.0.0 --port 80
